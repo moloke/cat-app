@@ -20,7 +20,7 @@ function CatCard({ cat, onToggleFavourite, onVote }: CatCardProps) {
   }
 
   const handleDownvote = () => {
-    onVote(cat.id, 0)
+    onVote(cat.id, -1)
   }
 
   return (
