@@ -149,7 +149,7 @@ function Upload() {
             <button
               type="button"
               onClick={handleClearFile}
-              className="text-red-600 hover:text-red-700 text-sm font-medium"
+              className="text-red-600 hover:text-red-700 text-sm font-medium cursor-pointer"
               disabled={uploadMutation.isPending}
             >
               Remove
@@ -170,7 +170,7 @@ function Upload() {
             className={`flex-1 py-3 px-6 rounded-lg font-medium transition-colors ${
               !selectedFile || uploadMutation.isPending
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
+                : 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
             }`}
           >
             {uploadMutation.isPending ? (
@@ -204,7 +204,7 @@ function Upload() {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
             disabled={uploadMutation.isPending}
           >
             Cancel
