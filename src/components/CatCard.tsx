@@ -67,7 +67,7 @@ function CatCard({ cat, onToggleFavourite, onVote }: CatCardProps) {
         <div className="flex items-center justify-between">
           <button
             onClick={handleFavouriteClick}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all cursor-pointer ${
               cat.isFavourited
                 ? 'bg-red-100 text-red-600 hover:bg-red-200'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -90,14 +90,14 @@ function CatCard({ cat, onToggleFavourite, onVote }: CatCardProps) {
           <div className="flex space-x-2">
             <button
               onClick={handleUpvote}
-              className="p-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition-colors"
+              className="p-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition-colors cursor-pointer"
               aria-label="Vote up"
             >
               <FaChevronUp className="text-xl" />
             </button>
             <button
               onClick={handleDownvote}
-              className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
+              className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors cursor-pointer"
               aria-label="Vote down"
             >
               <FaChevronDown className="text-xl" />

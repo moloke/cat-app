@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-hot-toast'
 import CatCard from '../components/CatCard'
 import { SkeletonGrid } from '../components/SkeletonLoader'
 import EmptyState from '../components/EmptyState'
@@ -6,11 +7,15 @@ import {
   fetchImages,
   fetchFavourites,
   fetchVotes,
+  createFavourite,
+  deleteFavourite,
 } from '../services/catApi'
 import { mergeCatData } from '../utils/mergeCatData'
 import type { CatCardData } from '../types'
 
 function Home() {
+  const queryClient = useQueryClient()
+
   const { data: images = [], isLoading: imagesLoading } = useQuery({
     queryKey: ['images'],
     queryFn: () => fetchImages(20),
@@ -28,12 +33,42 @@ function Home() {
 
   const cats: CatCardData[] = mergeCatData(images, favourites, votes)
 
+  const favouriteMutation = useMutation({
+    mutationFn: async ({
+      imageId,
+      isFavourited,
+      favouriteId,
+    }: {
+      imageId: string;
+      isFavourited: boolean;
+      favouriteId?: number;
+    }) => {
+      if (isFavourited && favouriteId) {
+        await deleteFavourite(favouriteId)
+        return { action: 'removed' }
+      } else {
+        await createFavourite(imageId)
+        return { action: 'added' }
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['favourites'] })
+      toast.success(
+        data.action === 'added' ? 'Added to favourites! ❤️' : 'Removed from favourites'
+      )
+    },
+    onError: (error: any) => {
+      const message = error.response?.data?.message || 'Failed to update favourite'
+      toast.error(message)
+    },
+  })
+
   const handleToggleFavourite = (
     imageId: string,
     isFavourited: boolean,
     favouriteId?: number
   ) => {
-    console.log('Toggle favourite:', { imageId, isFavourited, favouriteId })
+    favouriteMutation.mutate({ imageId, isFavourited, favouriteId })
   }
 
   const handleVote = (imageId: string, value: number) => {
