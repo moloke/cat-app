@@ -9,6 +9,7 @@ import {
   fetchVotes,
   createFavourite,
   deleteFavourite,
+  createVote,
 } from '../services/catApi'
 import { mergeCatData } from '../utils/mergeCatData'
 import type { CatCardData } from '../types'
@@ -63,6 +64,40 @@ function Home() {
     },
   })
 
+  const voteMutation = useMutation({
+    mutationFn: ({ imageId, value }: { imageId: string; value: number }) =>
+      createVote(imageId, value),
+    onMutate: async ({ imageId, value }) => {
+      await queryClient.cancelQueries({ queryKey: ['votes'] })
+
+      const previousVotes = queryClient.getQueryData(['votes'])
+
+      queryClient.setQueryData(['votes'], (old: any[] = []) => [
+        ...old,
+        {
+          id: Date.now(),
+          image_id: imageId,
+          value,
+          sub_id: 'temp',
+          created_at: new Date().toISOString(),
+        },
+      ])
+
+      return { previousVotes }
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['votes'] })
+      toast.success(variables.value === 1 ? 'Upvoted! 👍' : 'Downvoted! 👎')
+    },
+    onError: (error: any, _, context) => {
+      if (context?.previousVotes) {
+        queryClient.setQueryData(['votes'], context.previousVotes)
+      }
+      const message = error.response?.data?.message || 'Failed to register vote'
+      toast.error(message)
+    },
+  })
+
   const handleToggleFavourite = (
     imageId: string,
     isFavourited: boolean,
@@ -72,7 +107,7 @@ function Home() {
   }
 
   const handleVote = (imageId: string, value: number) => {
-    console.log('Vote:', { imageId, value })
+    voteMutation.mutate({ imageId, value })
   }
 
   const isLoading = imagesLoading || favouritesLoading || votesLoading
