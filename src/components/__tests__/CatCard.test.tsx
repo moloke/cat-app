@@ -122,7 +122,7 @@ describe('CatCard', () => {
     expect(mockHandlers.onVote).toHaveBeenCalledTimes(1)
   })
 
-  it('calls onVote with value 0 when downvote button is clicked', async () => {
+  it('calls onVote with value -1 when downvote button is clicked', async () => {
     const user = userEvent.setup()
     render(<CatCard cat={mockCat} {...mockHandlers} />)
     
@@ -130,7 +130,7 @@ describe('CatCard', () => {
     
     await user.click(downvoteButton)
     
-    expect(mockHandlers.onVote).toHaveBeenCalledWith(mockCat.id, 0)
+    expect(mockHandlers.onVote).toHaveBeenCalledWith(mockCat.id, -1)
     expect(mockHandlers.onVote).toHaveBeenCalledTimes(1)
   })
 

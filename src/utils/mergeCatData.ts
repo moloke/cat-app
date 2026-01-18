@@ -20,7 +20,7 @@ export function mergeCatData(
     const current = votesMap.get(vote.image_id) || { upvotes: 0, downvotes: 0 }
     if (vote.value === 1) {
       current.upvotes++
-    } else {
+    } else if (vote.value === -1) {
       current.downvotes++
     }
     votesMap.set(vote.image_id, current)
