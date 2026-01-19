@@ -19,14 +19,6 @@ A React TypeScript application for managing cat images. Built with React, TypeSc
 - Optimistic UI updates for instant feedback
 - Error boundary for graceful error handling
 
-**Technical Highlights**
-- TypeScript for type safety
-- TanStack Query for efficient data fetching and caching
-- React Router for navigation
-- Axios for HTTP requests
-- Comprehensive form validation
-- Unit tests for critical components
-
 ## Tech Stack
 
 - **Frontend Framework**: React 19 with TypeScript
